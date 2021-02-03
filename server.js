@@ -61,4 +61,19 @@ function  artistSearch() {
             search();
         })
     })
+};
+
+
+function songSearch() {
+    inquirer.prompt({
+        type: "input",
+        message: "What song would you like to search?",
+        name: "song"
+    }).then(function(response) {
+        connection.query("SELECT * FROM top_songs WHERE ?", { song : response.song}, function(err,res) {
+            if(err) throw err;
+            console.log("Position: " + res[0].position + " || Song: " + res[0].song + " || Artist: " + res[0].artist + " || Year: " + res[0].year);
+            search();
+        })
+    })
 }
