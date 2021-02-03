@@ -12,13 +12,13 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if(err) throw err;
-    console.log("connection complete")
+    search();
 });
 
 
 function search() {
     inquirer.prompt({
-        type: "rawlist",
+        type: "list",
         message: "What would you like to do?",
         choices: ["Search by artist", "Search by song", "Find artists with top song and album", "Search Artists that appear more than once", "Find data within a specific range"],
         name: "input"
@@ -47,3 +47,18 @@ function search() {
     })
 }
 
+function  artistSearch() {
+    inquirer.prompt({
+        type: "input",
+        message: "What aritist would you like to search?",
+        name: "artist"
+    }).then(function(response) {
+        var query = "SELECT position, song, year FROM top_songs WHERE ?";
+        connection.query(query, {artist: response.artist}, function(err,res) {
+            for (let i = 0; i < res.length; i++) {
+                console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
+            };
+            search();
+        })
+    })
+}
