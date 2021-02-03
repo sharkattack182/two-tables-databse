@@ -153,3 +153,16 @@ function songAndAlbumSearch() {
       );
     });
 }
+
+
+function multipleSearch() {
+    connection.query("SELECT artist FROM top_songs GROUP BY artist HAVING count(*) > 1", function(err,res) {
+        if(err) throw err;
+        for (let i = 0; i < res.length; i++) {
+            console.log(res[i].artist)
+        }
+        search();
+    })
+};
+
+
