@@ -166,3 +166,38 @@ function multipleSearch() {
 };
 
 
+function rangeSearch() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter starting position",
+            name: "start",
+            validate: function(value) {
+                if (isNaN(value) === false) {
+                  return true;
+                }
+                return false;
+              }
+        },
+        {
+            type: "input",
+            message: "Eter end position",
+            name: "end",
+            validate: function(value) {
+                if (isNaN(value) === false) {
+                  return true;
+                }
+                return false;
+              }
+        }
+    ]).then(function(response) {
+        connection.query("SELECT position, song, artist, year FROM top_songs WHERE position BETWEEN ? AND ?", [response.start, response.end], function(err,res) {
+            for (let i = 0; i < res.length; i++) {
+                console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Artist: " + res[i].artist + " || Year: " + res[i].year)
+            }
+            search();
+        })
+    })
+}
+
+
